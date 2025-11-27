@@ -199,9 +199,11 @@ const createPaymentSession = async (req, res) => {
     }
 
     const orderMeta = {
-      return_url: `${clientUrl}/payment/callback?order_id=${orderId}`,
+      return_url: `${clientUrl}/payment/callback?order_id={order_id}`,
       notify_url: `${serverUrl}/api/payments/webhook`,
     };
+    
+    
 
     // Validate Cashfree credentials
     if (!cashfreeConfig.clientId || !cashfreeConfig.clientSecret) {
