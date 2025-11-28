@@ -9,6 +9,7 @@ const {
   getInterestedEvents,
   bookEvent,
   getUserBookings,
+  getTicketDetails,
 } = require('../controllers/eventController');
 const { authenticate } = require('../middleware/auth');
 
@@ -23,6 +24,7 @@ router.delete('/:id/interested', authenticate, removeInterested);
 router.get('/interested/my', authenticate, getInterestedEvents);
 router.post('/:id/book', authenticate, bookEvent);
 router.get('/bookings/my', authenticate, getUserBookings);
+router.get('/bookings/:id/ticket', authenticate, getTicketDetails);
 
 module.exports = router;
 

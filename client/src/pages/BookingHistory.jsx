@@ -78,14 +78,27 @@ const BookingHistory = () => {
                         }`}>{booking.status}</span></p>
                       </div>
                     </div>
-                    {booking.event && (
-                      <Link
-                        to={`/events/${booking.event._id}`}
-                        className="bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 font-medium px-6 py-2 rounded-lg transition-all duration-200 whitespace-nowrap"
-                      >
-                        View Event
-                      </Link>
-                    )}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                      {booking.status === 'confirmed' && booking.paymentStatus === 'paid' && (
+                        <Link
+                          to={`/ticket/${booking._id}`}
+                          className="bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 font-medium px-4 sm:px-6 py-2 rounded-lg transition-all duration-200 whitespace-nowrap text-center flex items-center justify-center gap-2"
+                        >
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                          </svg>
+                          View Ticket
+                        </Link>
+                      )}
+                      {booking.event && (
+                        <Link
+                          to={`/events/${booking.event._id}`}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium px-4 sm:px-6 py-2 rounded-lg transition-all duration-200 whitespace-nowrap text-center"
+                        >
+                          View Event
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

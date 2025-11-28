@@ -23,6 +23,7 @@ import AppDownload from './pages/AppDownload';
 import Help from './pages/Help';
 import UploadBanner from './pages/UploadBanner';
 import PaymentCallback from './pages/PaymentCallback';
+import TicketView from './pages/TicketView';
 
 function App() {
   return (
@@ -40,6 +41,14 @@ function App() {
         <Route path="/brand-collaboration" element={<BrandCollaboration />} />
         <Route path="/auth/callback" element={<GoogleAuthCallback />} />
         <Route path="/payment/callback" element={<PaymentCallback />} />
+        <Route
+          path="/ticket/:bookingId"
+          element={
+            <ProtectedRoute>
+              <TicketView />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={

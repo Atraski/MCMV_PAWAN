@@ -250,30 +250,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Reach Section */}
-        <section className="bg-gradient-to-r from-[#FFF8DC] to-[#FFFEF0] py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
-                <span className="text-gray-900">Reach of </span>
-                <span className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] bg-clip-text text-transparent">
-                  My City My Voice
-                </span>
-              </h2>
-              <p className="text-gray-600 text-sm sm:text-base md:text-lg">
-                Discover the voices echoing from every Indian city
-              </p>
-            </div>
-            <div className="rounded-2xl overflow-hidden shadow-lg">
-              <img 
-                src={mapImage} 
-                alt="India Map showing reach of My City My Voice" 
-                className="w-full h-auto object-cover max-h-[400px] sm:max-h-[500px] md:max-h-[600px] lg:max-h-none"
-              />
-            </div>
-          </div>
-        </section>
-
         {/* Budding Wings Section */}
         <section className="bg-[#1A1A2E] py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
@@ -327,193 +303,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Brand Collaboration & Sponsorships Section */}
-        <section className="bg-gradient-to-b from-[#FFF8DC] to-[#FFFEF0] py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            {/* Header Area */}
-            <div className="text-center mb-12 sm:mb-16">
-              {/* Briefcase Icon */}
-              <div className="flex justify-center mb-6">
-                <svg className="w-12 h-12 sm:w-16 sm:h-16 text-[#FFD700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              
-              {/* Main Title */}
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 sm:mb-8">
-                Brand Collaboration & Sponsorships
-              </h2>
-              
-              {/* Subtitle */}
-              <p className="text-gray-700 text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-                Partner with <span className="text-[#FFD700] font-bold">My City My Voice</span> — where creativity meets visibility. Collaborate with us to grow your brand, engage audiences, and make an impact.
-              </p>
-            </div>
-
-            {/* Central Call-to-Action Card */}
-            <div className="bg-[#FFD700] rounded-2xl p-8 sm:p-10 md:p-12 shadow-lg mb-12 sm:mb-16">
-              <div className="text-center">
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
-                  Earn Recognition with Us
-                </h3>
-                <p className="text-gray-800 text-sm sm:text-base md:text-lg mb-8 sm:mb-10 max-w-2xl mx-auto">
-                  Collaborate with our platform for exclusive sponsorships, featured promotions, and event branding opportunities.
-                </p>
-                <button className="bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-8 sm:px-10 rounded-lg text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 mx-auto">
-                  Partner With Us
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Collaborations Section */}
-            <div className="text-center">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-8 sm:mb-12">
-                Our Past & Current Collaborations
-              </h3>
-              
-              {/* Logos Scrolling Container */}
-              <div className="overflow-hidden max-w-full -mx-4 sm:mx-0">
-                <div className="flex animate-scroll-logos gap-4 sm:gap-6 md:gap-8">
-                  {/* First set of logos */}
-                  <div className="flex gap-4 sm:gap-6 md:gap-8 flex-shrink-0">
-                    {/* Defence Bakery Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633390/defence_bakery_logo_snzaai.jpg" 
-                        alt="Defence Bakery" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Gaur City Mall Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633433/gaur-city-mall_g7od72.jpg" 
-                        alt="Gaur City Mall" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* GoStops Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633459/goStops_logo_700x400_pjlnbj.png" 
-                        alt="GoStops" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Kunzum Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633478/kunzum_logo_jpg_iuyutb.png" 
-                        alt="Kunzum" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Oxford Bookstore Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633548/oxford_bookstore_logo_kofxas.jpg" 
-                        alt="Oxford Bookstore" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Third Wave Coffee Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633568/third_wave_coffee_yh97rt.png" 
-                        alt="Third Wave Coffee" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Tong Garden Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633584/tong_garden_logo_eu8lce.png" 
-                        alt="Tong Garden" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Duplicate set for seamless loop */}
-                  <div className="flex gap-4 sm:gap-6 md:gap-8 flex-shrink-0">
-                    {/* Defence Bakery Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633390/defence_bakery_logo_snzaai.jpg" 
-                        alt="Defence Bakery" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Gaur City Mall Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633433/gaur-city-mall_g7od72.jpg" 
-                        alt="Gaur City Mall" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* GoStops Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633459/goStops_logo_700x400_pjlnbj.png" 
-                        alt="GoStops" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Kunzum Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633478/kunzum_logo_jpg_iuyutb.png" 
-                        alt="Kunzum" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Oxford Bookstore Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633548/oxford_bookstore_logo_kofxas.jpg" 
-                        alt="Oxford Bookstore" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Third Wave Coffee Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633568/third_wave_coffee_yh97rt.png" 
-                        alt="Third Wave Coffee" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-
-                    {/* Tong Garden Logo */}
-                    <div className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-lg flex items-center justify-center flex-shrink-0 w-40 sm:w-48 md:w-56 h-24 sm:h-32 md:h-40">
-                      <img 
-                        src="https://res.cloudinary.com/dfb2esugz/image/upload/v1763633584/tong_garden_logo_eu8lce.png" 
-                        alt="Tong Garden" 
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Note from the Founder Section */}
         <section className="bg-white py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
@@ -557,6 +346,143 @@ const Home = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Reach Section */}
+        <section className="bg-gradient-to-br from-[#FFF8DC] via-[#FFFEF0] to-[#FFE4B5] py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+          {/* Decorative Background Elements */}
+          <div className="absolute top-0 left-0 w-full h-full opacity-10">
+            <div className="absolute top-20 left-10 w-32 h-32 bg-[#FFD700] rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-10 w-40 h-40 bg-[#FFA500] rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#FFD700] rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            {/* Header */}
+            <div className="text-center mb-12 sm:mb-16">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
+                <span className="text-gray-900">Reach of </span>
+                <span className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] bg-clip-text text-transparent">
+                  My City My Voice
+                </span>
+              </h2>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg max-w-3xl mx-auto">
+                Connecting voices across India, one city at a time
+              </p>
+            </div>
+
+            {/* Statistics Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
+              {/* Stat Card 1 */}
+              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FFD700] mb-2">
+                  50+
+                </div>
+                <div className="text-xs sm:text-sm text-gray-700 font-medium">
+                  Cities
+                </div>
+              </div>
+
+              {/* Stat Card 2 */}
+              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FFD700] mb-2">
+                  10K+
+                </div>
+                <div className="text-xs sm:text-sm text-gray-700 font-medium">
+                  Active Users
+                </div>
+              </div>
+
+              {/* Stat Card 3 */}
+              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FFD700] mb-2">
+                  500+
+                </div>
+                <div className="text-xs sm:text-sm text-gray-700 font-medium">
+                  Events
+                </div>
+              </div>
+
+              {/* Stat Card 4 */}
+              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FFD700] mb-2">
+                  25+
+                </div>
+                <div className="text-xs sm:text-sm text-gray-700 font-medium">
+                  States
+                </div>
+              </div>
+            </div>
+
+            {/* Key Cities Showcase */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 md:p-10">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 text-center mb-8 sm:mb-10">
+                Our Presence Across India
+              </h3>
+              
+              {/* Cities Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+                {/* City Card */}
+                {['Delhi', 'Mumbai', 'Bangalore', 'Kolkata', 'Chennai', 'Hyderabad', 'Pune', 'Ahmedabad', 'Jaipur', 'Nagpur', 'Lucknow', 'Chandigarh'].map((city, index) => (
+                  <div 
+                    key={index}
+                    className="bg-gradient-to-br from-[#FFD700] to-[#FFA500] rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group"
+                  >
+                    <div className="text-center">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="text-xs sm:text-sm font-semibold text-gray-900 group-hover:text-white transition-colors">
+                        {city}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Growth Indicator */}
+              <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-gray-200">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-center sm:text-left">
+                    <div className="text-2xl sm:text-3xl font-bold text-[#FFD700] mb-1">
+                      Growing Every Day
+                    </div>
+                    <p className="text-sm sm:text-base text-gray-600">
+                      Expanding to new cities and communities
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="flex -space-x-2">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div 
+                          key={i}
+                          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#FFD700] to-[#FFA500] border-2 border-white shadow-md"
+                        ></div>
+                      ))}
+                    </div>
+                    <div className="text-sm sm:text-base font-semibold text-gray-900">
+                      +12 New Cities
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Call to Action */}
+            <div className="text-center mt-8 sm:mt-10">
+              <p className="text-gray-700 text-sm sm:text-base mb-4">
+                Want to bring My City My Voice to your city?
+              </p>
+              <Link
+                to="/contact"
+                className="inline-block bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 font-semibold py-2.5 px-6 sm:px-8 rounded-lg text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                Get In Touch
+              </Link>
             </div>
           </div>
         </section>

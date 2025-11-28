@@ -400,7 +400,8 @@ const getUserBookings = async (req, res) => {
     const userId = req.userId;
 
     const bookings = await Booking.find({ user: userId })
-      .populate('event', 'title date time location image price')
+      .populate('event', 'title date time endTime endDate location image price currency organizer')
+      .populate('user', 'name email mobile')
       .sort({ createdAt: -1 });
 
     res.json({
@@ -412,6 +413,158 @@ const getUserBookings = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error fetching bookings',
+      error: error.message,
+    });
+  }
+};
+
+// @route   GET /api/bookings/:id/ticket
+// @desc    Get ticket details for a booking
+// @access  Private
+const getTicketDetails = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const bookingId = req.params.id;
+
+    const booking = await Booking.findById(bookingId)
+      .populate({
+        path: 'user',
+        select: 'name email mobile',
+      });
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: 'Booking not found',
+      });
+    }
+
+    // Get raw booking to check event field value
+    const rawBooking = await Booking.findById(bookingId).lean();
+    const Event = require('../models/Event');
+    let event = null;
+
+    // Try to find event - check multiple possibilities
+    if (rawBooking.event) {
+      // Event field exists in database - try to find it
+      const eventId = rawBooking.event.toString ? rawBooking.event.toString() : rawBooking.event;
+      console.log('Looking up event with ID:', eventId);
+      
+      if (eventId && eventId.match(/^[0-9a-fA-F]{24}$/)) {
+        event = await Event.findById(eventId)
+          .select('title date time endTime endDate location image price currency organizer');
+      }
+    }
+
+    // Log for debugging
+    console.log('Event lookup result:', {
+      bookingId: booking._id,
+      rawEventField: rawBooking.event,
+      eventFound: !!event,
+      eventId: event?._id || 'not found',
+    });
+
+    // Log event lookup result
+    console.log('Event lookup result:', {
+      eventFound: !!event,
+      eventId: event?._id || booking.event || 'null',
+    });
+
+    // Check if user exists
+    if (!booking.user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found for this booking.',
+      });
+    }
+
+    // Check if booking belongs to the user
+    if (booking.user._id.toString() !== userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. This booking does not belong to you.',
+      });
+    }
+
+    // Check if event exists
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found. This booking may be associated with a deleted event.',
+      });
+    }
+
+    // Check if booking is confirmed
+    if (booking.status !== 'confirmed' || booking.paymentStatus !== 'paid') {
+      return res.status(400).json({
+        success: false,
+        message: 'Ticket is not available. Booking is not confirmed.',
+      });
+    }
+
+    // Calculate gate closing time (30 minutes before event start)
+    const { parseTimeString, isEventPast } = require('../utils/eventHelpers');
+    
+    // Validate event date and time
+    if (!event.date || !event.time) {
+      return res.status(400).json({
+        success: false,
+        message: 'Event date or time is missing. Cannot generate ticket.',
+      });
+    }
+
+    const eventDate = new Date(event.date);
+    const eventStartTime = parseTimeString(event.time, eventDate);
+    
+    if (!eventStartTime) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid event time format. Cannot generate ticket.',
+      });
+    }
+
+    const gateClosingTime = new Date(eventStartTime);
+    gateClosingTime.setMinutes(gateClosingTime.getMinutes() - 30);
+
+    // Check if event is past
+    const eventIsPast = isEventPast(event);
+
+    res.json({
+      success: true,
+      ticket: {
+        booking: {
+          _id: booking._id,
+          bookingReference: booking.bookingReference,
+          tickets: booking.tickets,
+          totalAmount: booking.totalAmount,
+          currency: event.currency || 'INR',
+          createdAt: booking.createdAt,
+        },
+        user: {
+          name: booking.user.name || booking.attendeeDetails?.name || 'Guest',
+          email: booking.user.email || booking.attendeeDetails?.email || '',
+          mobile: booking.user.mobile || booking.attendeeDetails?.phone || '',
+        },
+        event: {
+          title: event.title,
+          date: event.date,
+          time: event.time,
+          endTime: event.endTime,
+          endDate: event.endDate,
+          location: event.location,
+          image: event.image,
+          organizer: event.organizer,
+        },
+        gateClosingTime: gateClosingTime,
+        eventStartTime: eventStartTime,
+        eventIsPast: eventIsPast,
+      },
+    });
+  } catch (error) {
+    console.error('Get ticket details error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching ticket details',
       error: error.message,
     });
   }
@@ -499,5 +652,6 @@ module.exports = {
   getInterestedEvents,
   bookEvent,
   getUserBookings,
+  getTicketDetails,
 };
 

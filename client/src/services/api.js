@@ -140,6 +140,11 @@ export const eventsAPI = {
     return apiRequest('/events/bookings/my');
   },
 
+  // Get ticket details
+  getTicketDetails: async (bookingId) => {
+    return apiRequest(`/events/bookings/${bookingId}/ticket`);
+  },
+
   // Get interested events
   getInterestedEvents: async () => {
     return apiRequest('/events/interested/my');
