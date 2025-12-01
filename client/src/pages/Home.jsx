@@ -425,7 +425,7 @@ const Home = () => {
               {/* Cities Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
                 {/* City Card */}
-                {['Delhi', 'Mumbai', 'Bangalore', 'Kolkata', 'Chennai', 'Hyderabad', 'Pune', 'Ahmedabad', 'Jaipur', 'Nagpur', 'Lucknow', 'Chandigarh'].map((city, index) => (
+                {['Kolkata', 'Thane', 'Bangalore', 'Noida', 'Hyderabad', 'Lucknow', 'Mumbai', 'Pune', 'Delhi', 'Chandigarh', 'Ahmedabad'].map((city, index) => (
                   <div 
                     key={index}
                     className="bg-gradient-to-br from-[#FFD700] to-[#FFA500] rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group"
@@ -465,7 +465,7 @@ const Home = () => {
                       ))}
                     </div>
                     <div className="text-sm sm:text-base font-semibold text-gray-900">
-                      +12 New Cities
+                      11 Cities
                     </div>
                   </div>
                 </div>
