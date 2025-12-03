@@ -10,6 +10,10 @@ const {
   googleAuthCallback,
   getCurrentUser,
   updateCurrentUser,
+  sendEmailVerification,
+  verifyEmail,
+  sendMobileVerification,
+  verifyMobile,
 } = require('../controllers/authController');
 const { authenticate } = require('../middleware/auth');
 
@@ -32,6 +36,14 @@ router.get(
 // Get current user (protected route)
 router.get('/me', authenticate, getCurrentUser);
 router.put('/me', authenticate, updateCurrentUser);
+
+// Email Verification (protected routes)
+router.post('/email/send-verification', authenticate, sendEmailVerification);
+router.post('/email/verify', authenticate, verifyEmail);
+
+// Mobile Verification (protected routes)
+router.post('/mobile/send-verification', authenticate, sendMobileVerification);
+router.post('/mobile/verify-verification', authenticate, verifyMobile);
 
 module.exports = router;
 

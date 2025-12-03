@@ -29,10 +29,10 @@ const MeetTheTeam = () => {
     },
     west: {
       role: 'West Regional Head',
-      previousExperience: 'Previous Experience',
-      name: 'NAME',
-      description: 'Bio/Description will go here for the West Regional Head.',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80'
+      previousExperience: 'Poet, Lyricist & Spoken Word Artist',
+      name: 'Nehal Bhanushali',
+      description: 'Nehal Bhanushali is a poet, lyricist, and spoken word artist whose words effortlessly connect with diverse audiences. With 250+ performances since 2017 and notable appearances alongside artists like Helly Shah and Priya Malik, she has built a strong presence in the spoken word circuit. As the Western Region Head of MCMV, she is dedicated to nurturing creative communities and amplifying authentic voices across the region.',
+      image: 'https://res.cloudinary.com/dfb2esugz/image/upload/v1764765775/west_regional_head_ph1uhm.jpg'
     }
   };
 

@@ -15,11 +15,12 @@ const apiRequest = async (endpoint, options = {}) => {
   };
 
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, config);
+    const url = `${API_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
+    const response = await fetch(url, config);
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.message || 'Request failed');
+      throw new Error(data.message || data.error || 'Request failed');
     }
 
     return data;
@@ -77,6 +78,34 @@ export const authAPI = {
     return apiRequest('/auth/me', {
       method: 'PUT',
       body: JSON.stringify(userData),
+    });
+  },
+
+  // Email Verification
+  sendEmailVerification: async () => {
+    return apiRequest('/auth/email/send-verification', {
+      method: 'POST',
+    });
+  },
+
+  verifyEmail: async (otp) => {
+    return apiRequest('/auth/email/verify', {
+      method: 'POST',
+      body: JSON.stringify({ otp }),
+    });
+  },
+
+  // Mobile Verification
+  sendMobileVerification: async () => {
+    return apiRequest('/auth/mobile/send-verification', {
+      method: 'POST',
+    });
+  },
+
+  verifyMobile: async (otp) => {
+    return apiRequest('/auth/mobile/verify-verification', {
+      method: 'POST',
+      body: JSON.stringify({ otp }),
     });
   },
 };

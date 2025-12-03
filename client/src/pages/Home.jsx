@@ -51,13 +51,13 @@ const Home = () => {
           },
           {
             id: 1,
-            url: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80',
-            alt: 'Community gathering',
+            url: 'https://res.cloudinary.com/dfb2esugz/image/upload/v1764764373/pune_website_picture_fpepvh.png',
+            alt: 'Pune',
           },
           {
             id: 2,
-            url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1920&q=80',
-            alt: 'People discussing',
+            url: 'https://res.cloudinary.com/dfb2esugz/image/upload/v1764764774/mumbai_website_picture_i09j88.png',
+            alt: 'Mumbai',
           },
         ]);
       }
@@ -78,13 +78,13 @@ const Home = () => {
         },
         {
           id: 1,
-          url: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80',
-          alt: 'Community gathering',
+          url: 'https://res.cloudinary.com/dfb2esugz/image/upload/v1764764373/pune_website_picture_fpepvh.png',
+          alt: 'Pune',
         },
         {
           id: 2,
-          url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1920&q=80',
-          alt: 'People discussing',
+          url: 'https://res.cloudinary.com/dfb2esugz/image/upload/v1764764774/mumbai_website_picture_i09j88.png',
+          alt: 'Mumbai',
         },
       ]);
     } finally {
@@ -422,26 +422,64 @@ const Home = () => {
                 Our Presence Across India
               </h3>
               
-              {/* Cities Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-                {/* City Card */}
-                {['Kolkata', 'Thane', 'Bangalore', 'Noida', 'Hyderabad', 'Lucknow', 'Mumbai', 'Pune', 'Delhi', 'Chandigarh', 'Ahmedabad'].map((city, index) => (
-                  <div 
-                    key={index}
-                    className="bg-gradient-to-br from-[#FFD700] to-[#FFA500] rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group"
-                  >
-                    <div className="text-center">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="text-xs sm:text-sm font-semibold text-gray-900 group-hover:text-white transition-colors">
-                        {city}
+              {/* Cities Scrolling Marquee */}
+              <div className="relative overflow-hidden py-4">
+                <style>{`
+                  @keyframes scroll {
+                    0% {
+                      transform: translateX(0);
+                    }
+                    100% {
+                      transform: translateX(-50%);
+                    }
+                  }
+                  .animate-scroll {
+                    animation: scroll 20s linear infinite;
+                    display: flex;
+                    will-change: transform;
+                  }
+                  .animate-scroll:hover {
+                    animation-play-state: paused;
+                  }
+                `}</style>
+                <div className="flex animate-scroll gap-4 sm:gap-6">
+                  {/* First set of cities */}
+                  {['Kolkata', 'Thane', 'Bangalore', 'Noida', 'Hyderabad', 'Lucknow', 'Mumbai', 'Pune', 'Delhi', 'Chandigarh', 'Ahmedabad'].map((city, index) => (
+                    <div 
+                      key={`first-${index}`}
+                      className="flex-shrink-0 bg-gradient-to-br from-[#FFD700] to-[#FFA500] rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group w-[140px] sm:w-[160px]"
+                    >
+                      <div className="text-center">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-900 group-hover:text-white transition-colors">
+                          {city}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                  {/* Duplicate set for seamless loop */}
+                  {['Kolkata', 'Thane', 'Bangalore', 'Noida', 'Hyderabad', 'Lucknow', 'Mumbai', 'Pune', 'Delhi', 'Chandigarh', 'Ahmedabad'].map((city, index) => (
+                    <div 
+                      key={`second-${index}`}
+                      className="flex-shrink-0 bg-gradient-to-br from-[#FFD700] to-[#FFA500] rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group w-[140px] sm:w-[160px]"
+                    >
+                      <div className="text-center">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-900 group-hover:text-white transition-colors">
+                          {city}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Growth Indicator */}

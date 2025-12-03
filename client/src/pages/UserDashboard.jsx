@@ -9,6 +9,14 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [dashboardUser, setDashboardUser] = useState(null);
+  const [showEmailOTP, setShowEmailOTP] = useState(false);
+  const [showMobileOTP, setShowMobileOTP] = useState(false);
+  const [emailOTP, setEmailOTP] = useState('');
+  const [mobileOTP, setMobileOTP] = useState('');
+  const [sendingOTP, setSendingOTP] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [otpSuccess, setOtpSuccess] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -34,6 +42,98 @@ const UserDashboard = () => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleSendEmailOTP = async () => {
+    try {
+      setSendingOTP(true);
+      setOtpError('');
+      setOtpSuccess('');
+      const response = await authAPI.sendEmailVerification();
+      if (response.success) {
+        setOtpSuccess('Verification code sent to your email!');
+        setShowEmailOTP(true);
+        if (response.otp) {
+          console.log('Email OTP:', response.otp);
+        }
+      }
+    } catch (error) {
+      setOtpError(error.message || 'Failed to send verification code');
+    } finally {
+      setSendingOTP(false);
+    }
+  };
+
+  const handleVerifyEmail = async () => {
+    try {
+      setVerifying(true);
+      setOtpError('');
+      if (!emailOTP || emailOTP.length !== 6) {
+        setOtpError('Please enter a valid 6-digit OTP');
+        return;
+      }
+      const response = await authAPI.verifyEmail(emailOTP);
+      if (response.success) {
+        setOtpSuccess('Email verified successfully!');
+        setDashboardUser({ ...dashboardUser, isEmailVerified: true });
+        updateUser({ ...dashboardUser, isEmailVerified: true });
+        setTimeout(() => {
+          setShowEmailOTP(false);
+          setEmailOTP('');
+          setOtpSuccess('');
+        }, 2000);
+      }
+    } catch (error) {
+      setOtpError(error.message || 'Failed to verify email');
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const handleSendMobileOTP = async () => {
+    try {
+      setSendingOTP(true);
+      setOtpError('');
+      setOtpSuccess('');
+      const response = await authAPI.sendMobileVerification();
+      if (response.success) {
+        setOtpSuccess('Verification code sent to your mobile!');
+        setShowMobileOTP(true);
+        if (response.otp) {
+          console.log('Mobile OTP:', response.otp);
+        }
+      }
+    } catch (error) {
+      setOtpError(error.message || 'Failed to send verification code');
+    } finally {
+      setSendingOTP(false);
+    }
+  };
+
+  const handleVerifyMobile = async () => {
+    try {
+      setVerifying(true);
+      setOtpError('');
+      if (!mobileOTP || mobileOTP.length !== 6) {
+        setOtpError('Please enter a valid 6-digit OTP');
+        return;
+      }
+      const response = await authAPI.verifyMobile(mobileOTP);
+      if (response.success) {
+        setOtpSuccess('Mobile number verified successfully!');
+        setDashboardUser({ ...dashboardUser, isMobileVerified: true });
+        updateUser({ ...dashboardUser, isMobileVerified: true });
+        setTimeout(() => {
+          setShowMobileOTP(false);
+          setMobileOTP('');
+          setOtpSuccess('');
+        }, 2000);
+      }
+    } catch (error) {
+      setOtpError(error.message || 'Failed to verify mobile');
+    } finally {
+      setVerifying(false);
+    }
   };
 
   if (loading) {
@@ -157,29 +257,11 @@ const UserDashboard = () => {
             {/* Verification Status Card */}
             <div className="bg-white rounded-xl shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Verification</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Email</span>
-                  {dashboardUser.isEmailVerified ? (
-                    <span className="inline-flex items-center gap-1 text-green-600 text-sm font-medium">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Verified
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 text-orange-600 text-sm font-medium">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                      </svg>
-                      Not Verified
-                    </span>
-                  )}
-                </div>
-                {dashboardUser.mobile && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Mobile</span>
-                    {dashboardUser.isMobileVerified ? (
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-gray-600">Email</span>
+                    {dashboardUser.isEmailVerified ? (
                       <span className="inline-flex items-center gap-1 text-green-600 text-sm font-medium">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -193,6 +275,46 @@ const UserDashboard = () => {
                         </svg>
                         Not Verified
                       </span>
+                    )}
+                  </div>
+                  {!dashboardUser.isEmailVerified && (
+                    <button
+                      onClick={handleSendEmailOTP}
+                      disabled={sendingOTP}
+                      className="w-full bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 font-medium py-2 px-4 rounded-lg transition-all duration-200 text-sm disabled:opacity-50"
+                    >
+                      {sendingOTP ? 'Sending...' : 'Verify Email'}
+                    </button>
+                  )}
+                </div>
+                {dashboardUser.mobile && (
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-gray-600">Mobile</span>
+                      {dashboardUser.isMobileVerified ? (
+                        <span className="inline-flex items-center gap-1 text-green-600 text-sm font-medium">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          Verified
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-orange-600 text-sm font-medium">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                          </svg>
+                          Not Verified
+                        </span>
+                      )}
+                    </div>
+                    {!dashboardUser.isMobileVerified && (
+                      <button
+                        onClick={handleSendMobileOTP}
+                        disabled={sendingOTP}
+                        className="w-full bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 font-medium py-2 px-4 rounded-lg transition-all duration-200 text-sm disabled:opacity-50"
+                      >
+                        {sendingOTP ? 'Sending...' : 'Verify Mobile'}
+                      </button>
                     )}
                   </div>
                 )}
@@ -241,6 +363,118 @@ const UserDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Email OTP Modal */}
+      {showEmailOTP && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Verify Email</h3>
+            {otpSuccess && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm mb-4">
+                {otpSuccess}
+              </div>
+            )}
+            {otpError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
+                {otpError}
+              </div>
+            )}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Enter 6-digit OTP sent to {dashboardUser?.email}
+              </label>
+              <input
+                type="text"
+                value={emailOTP}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  setEmailOTP(value);
+                  setOtpError('');
+                }}
+                placeholder="000000"
+                maxLength={6}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700] text-center text-2xl tracking-widest"
+              />
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowEmailOTP(false);
+                  setEmailOTP('');
+                  setOtpError('');
+                  setOtpSuccess('');
+                }}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium py-2 px-4 rounded-lg transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleVerifyEmail}
+                disabled={verifying || emailOTP.length !== 6}
+                className="flex-1 bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 font-medium py-2 px-4 rounded-lg transition-all duration-200 disabled:opacity-50"
+              >
+                {verifying ? 'Verifying...' : 'Verify'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile OTP Modal */}
+      {showMobileOTP && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Verify Mobile</h3>
+            {otpSuccess && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm mb-4">
+                {otpSuccess}
+              </div>
+            )}
+            {otpError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
+                {otpError}
+              </div>
+            )}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Enter 6-digit OTP sent to {dashboardUser?.mobile}
+              </label>
+              <input
+                type="text"
+                value={mobileOTP}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  setMobileOTP(value);
+                  setOtpError('');
+                }}
+                placeholder="000000"
+                maxLength={6}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700] text-center text-2xl tracking-widest"
+              />
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowMobileOTP(false);
+                  setMobileOTP('');
+                  setOtpError('');
+                  setOtpSuccess('');
+                }}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium py-2 px-4 rounded-lg transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleVerifyMobile}
+                disabled={verifying || mobileOTP.length !== 6}
+                className="flex-1 bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 font-medium py-2 px-4 rounded-lg transition-all duration-200 disabled:opacity-50"
+              >
+                {verifying ? 'Verifying...' : 'Verify'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

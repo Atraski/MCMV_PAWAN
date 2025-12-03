@@ -216,14 +216,15 @@ const Events = () => {
               <Link
                 key={event._id}
                 to={`/events/${event._id}`}
-                className="bg-white rounded-lg sm:rounded-xl shadow-sm sm:shadow-md overflow-hidden hover:shadow-lg sm:hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 sm:hover:-translate-y-1 active:scale-[0.98]"
+                className="bg-white rounded-lg sm:rounded-xl shadow-sm sm:shadow-md overflow-hidden hover:shadow-lg sm:hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 sm:hover:-translate-y-1 active:scale-[0.98] flex flex-col h-full"
               >
-                {/* Event Image - Mobile Optimized */}
-                <div className="relative w-full aspect-[4/3] sm:aspect-[3/2] overflow-hidden bg-gray-100">
+                {/* Event Image - Professional Alignment */}
+                <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100 flex-shrink-0">
                   <img
                     src={event.image}
                     alt={event.title}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    className="w-full h-full object-contain bg-white transition-transform duration-300 hover:scale-105"
+                    loading="lazy"
                     onError={(e) => {
                       e.target.src = 'https://via.placeholder.com/400x300?text=Event+Image';
                     }}
@@ -253,36 +254,36 @@ const Events = () => {
                   </button>
                 </div>
 
-                {/* Event Details - Mobile Optimized */}
-                <div className="p-3 sm:p-4 md:p-5">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-tight">
+                {/* Event Details - Professional Alignment */}
+                <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-grow">
+                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-tight min-h-[2.5rem] sm:min-h-[3rem]">
                     {event.title}
                   </h3>
-                  <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
-                    <p className="text-xs sm:text-sm text-gray-600 flex items-center gap-1.5">
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 flex-grow">
+                    <p className="text-xs sm:text-sm text-gray-600 flex items-start gap-1.5">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       <span className="truncate">{formatDate(event.date)} • {formatTime(event.time)}</span>
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-600 flex items-center gap-1.5 line-clamp-1">
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <p className="text-xs sm:text-sm text-gray-600 flex items-start gap-1.5 line-clamp-1">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       <span className="truncate">{event.location?.venue || event.location || 'Venue TBA'}</span>
                     </p>
                   </div>
-                  <div className="flex items-center justify-between pt-2.5 sm:pt-3 border-t border-gray-100 sm:border-gray-200">
+                  <div className="flex items-center justify-between pt-2.5 sm:pt-3 border-t border-gray-100 sm:border-gray-200 mt-auto">
                     <div className="flex items-center gap-1.5 sm:gap-2">
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                       <span className="text-xs sm:text-sm text-gray-600 font-medium">
                         {event.interestedCount || 0}+ Interested
                       </span>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right flex-shrink-0">
                       {event.price === 0 ? (
                         <span className="text-xs sm:text-sm md:text-base font-semibold text-green-600">Free</span>
                       ) : (

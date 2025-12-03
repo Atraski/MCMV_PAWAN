@@ -6,18 +6,15 @@ import { authAPI, saveToken } from '../services/api';
 const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [authStep, setAuthStep] = useState('initial'); // 'initial', 'email', 'mobile', 'otp'
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [authStep, setAuthStep] = useState('initial'); // 'initial', 'email'
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [signUpMobile, setSignUpMobile] = useState('');
-  const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isSignUp, setIsSignUp] = useState(false); // Toggle between sign in and sign up
-  const [isNewUser, setIsNewUser] = useState(false); // Track if user is new (for OTP flow)
 
   if (!isOpen) return null;
 
@@ -29,32 +26,26 @@ const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
 
   const handleClose = () => {
     setAuthStep('initial');
-    setMobileNumber('');
     setEmail('');
     setName('');
     setPassword('');
     setConfirmPassword('');
     setSignUpMobile('');
-    setOtp('');
     setIsLoading(false);
     setError('');
     setIsSignUp(false);
-    setIsNewUser(false);
     onClose();
   };
 
   const handleBackToInitial = () => {
     setAuthStep('initial');
-    setMobileNumber('');
     setEmail('');
     setName('');
     setPassword('');
     setConfirmPassword('');
     setSignUpMobile('');
-    setOtp('');
     setError('');
     setIsSignUp(false);
-    setIsNewUser(false);
   };
 
   const handleEmailSignIn = () => {
@@ -128,7 +119,7 @@ const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
         response = await authAPI.login(email.trim().toLowerCase(), password);
       }
 
-      if (response.success && response.token) {
+      if (response && response.success && response.token) {
         saveToken(response.token);
         // Update auth context with user data
         if (response.user) {
@@ -139,78 +130,17 @@ const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
         const redirectUrl = redirectAfterLogin || localStorage.getItem('redirectAfterLogin') || '/dashboard';
         localStorage.removeItem('redirectAfterLogin');
         navigate(redirectUrl);
+      } else {
+        setError(response?.message || 'Login failed. Please try again.');
       }
     } catch (err) {
+      console.error('Auth error:', err);
       setError(err.message || 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleMobileContinue = async () => {
-    if (!isValidMobileNumber) return;
-
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const response = await authAPI.sendMobileOTP(mobileNumber);
-      if (response.success) {
-        setIsNewUser(response.isNewUser || false);
-        setAuthStep('otp');
-        // In development, show OTP in console if available
-        if (response.otp) {
-          console.log('OTP (dev only):', response.otp);
-        }
-      }
-    } catch (err) {
-      setError(err.message || 'Failed to send OTP. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleOTPVerify = async () => {
-    if (otp.length !== 6) return;
-
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const response = await authAPI.verifyMobileOTP(mobileNumber, otp);
-      if (response.success && response.token) {
-        saveToken(response.token);
-        // Update auth context with user data
-        if (response.user) {
-          login(response.user, response.token);
-        }
-        handleClose();
-        // Redirect to specified URL or dashboard
-        const redirectUrl = redirectAfterLogin || localStorage.getItem('redirectAfterLogin') || '/dashboard';
-        localStorage.removeItem('redirectAfterLogin');
-        navigate(redirectUrl);
-      }
-    } catch (err) {
-      setError(err.message || 'Invalid OTP. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleResendOTP = async () => {
-    await handleMobileContinue();
-  };
-
-  // Validate mobile number - must be exactly 10 digits
-  const isValidMobileNumber = /^\d{10}$/.test(mobileNumber);
-
-  // Handle mobile number input - only allow digits, max 10
-  const handleMobileNumberChange = (e) => {
-    const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-    if (value.length <= 10) {
-      setMobileNumber(value);
-    }
-  };
 
   // Handle signup mobile input
   const handleSignUpMobileChange = (e) => {
@@ -258,7 +188,6 @@ const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
           {/* Title */}
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">
             {authStep === 'email' && (isSignUp ? 'Create Account' : 'Sign In')}
-            {authStep === 'otp' && 'Verify Mobile Number'}
             {authStep === 'initial' && 'Get Started'}
           </h2>
 
@@ -277,53 +206,6 @@ const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
                   <span className="text-gray-900 font-medium text-sm sm:text-base">Continue with Email</span>
                 </button>
               </div>
-
-              {/* OR Separator */}
-              <div className="relative mb-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">OR</span>
-                </div>
-              </div>
-
-              {/* Mobile Number Input */}
-              <div className="mb-6">
-                <div 
-                  className="flex items-center border-b border-gray-300 pb-2 cursor-text"
-                  onClick={() => {
-                    document.querySelector('#mobile-input')?.focus();
-                  }}
-                >
-                  <span className="text-2xl mr-2">🇮🇳</span>
-                  <span className="text-gray-700 font-medium mr-2">+91</span>
-                  <input
-                    id="mobile-input"
-                    type="tel"
-                    value={mobileNumber}
-                    onChange={handleMobileNumberChange}
-                    placeholder="Continue with mobile number"
-                    maxLength={10}
-                    className="flex-1 outline-none text-gray-900 placeholder-gray-400 text-sm sm:text-base bg-transparent"
-                  />
-                </div>
-              </div>
-
-              {/* Continue Button - Shows when mobile input has value */}
-              {mobileNumber && (
-                <button 
-                  onClick={handleMobileContinue}
-                  disabled={!isValidMobileNumber}
-                  className={`w-full font-semibold py-3 px-4 rounded-lg transition-all duration-300 mb-4 ${
-                    isValidMobileNumber
-                      ? 'bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 shadow-lg transform hover:scale-[1.02] cursor-pointer'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  Continue
-                </button>
-              )}
 
               {/* Terms & Conditions */}
               <p className="text-xs sm:text-sm text-gray-600 text-center mt-6">
@@ -480,74 +362,6 @@ const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
             </form>
           )}
 
-          {/* OTP Verification View */}
-          {authStep === 'otp' && (
-            <div className="space-y-6">
-              {isLoading && !otp ? (
-                <div className="text-center py-8">
-                  <div className="flex justify-center mb-4">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FFD700]"></div>
-                  </div>
-                  <p className="text-gray-600">Sending OTP to +91 {mobileNumber}...</p>
-                </div>
-              ) : (
-                <>
-                  {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                      {error}
-                    </div>
-                  )}
-                  <div className="text-center">
-                    <p className="text-gray-600 mb-2">We've sent a verification code to</p>
-                    <p className="text-gray-900 font-semibold">+91 {mobileNumber}</p>
-                    {isNewUser && (
-                      <p className="text-sm text-[#FFD700] mt-2 font-medium">
-                        New user? Your account will be created after verification.
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
-                    <input
-                      type="text"
-                      value={otp}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, '');
-                        if (value.length <= 6) {
-                          setOtp(value);
-                          setError('');
-                        }
-                      }}
-                      placeholder="Enter 6-digit OTP"
-                      maxLength={6}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent text-center text-2xl tracking-widest"
-                    />
-                  </div>
-                  <button 
-                    onClick={handleOTPVerify}
-                    disabled={otp.length !== 6 || isLoading}
-                    className={`w-full font-semibold py-3 px-4 rounded-lg transition-all duration-300 ${
-                      otp.length === 6 && !isLoading
-                        ? 'bg-[#FFD700] hover:bg-[#FFC700] text-gray-900 shadow-lg transform hover:scale-[1.02] cursor-pointer'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
-                  >
-                    {isLoading ? 'Verifying...' : 'Verify OTP'}
-                  </button>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-2">Didn't receive the code?</p>
-                    <button 
-                      onClick={handleResendOTP}
-                      disabled={isLoading}
-                      className="text-[#FFD700] hover:underline font-medium text-sm disabled:opacity-50"
-                    >
-                      Resend OTP
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -547,6 +547,296 @@ const updateCurrentUser = async (req, res) => {
   }
 };
 
+// @route   POST /api/auth/email/send-verification
+// @desc    Send email verification OTP to logged-in user
+// @access  Private
+const sendEmailVerification = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (!user.email) {
+      return res.status(400).json({
+        success: false,
+        message: 'No email address found for this account',
+      });
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is already verified',
+      });
+    }
+
+    // Generate 6-digit OTP
+    const otpCode = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
+    });
+
+    // Set expiration (10 minutes)
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+
+    // Save OTP to user
+    user.otp = { code: otpCode, expiresAt };
+    await user.save();
+
+    // Send OTP via Email
+    const emailResult = await sendOTPviaEmail(user.email, otpCode);
+
+    // Always show OTP in console for development/testing
+    console.log('\n📧 ============================================');
+    console.log('📧 Email Verification OTP Generated:');
+    console.log(`📧 Email: ${user.email}`);
+    console.log(`📧 OTP Code: ${otpCode}`);
+    console.log(`📧 Valid for: 10 minutes`);
+    console.log('📧 ============================================\n');
+
+    res.json({
+      success: true,
+      message: 'Verification code sent to your email',
+      // In development, always return OTP for testing
+      ...(process.env.NODE_ENV === 'development' && { otp: otpCode }),
+      // Also return OTP if email failed (for testing)
+      ...(emailResult && !emailResult.success && { otp: otpCode }),
+    });
+  } catch (error) {
+    console.error('Send email verification error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error sending verification code',
+      error: error.message,
+    });
+  }
+};
+
+// @route   POST /api/auth/email/verify
+// @desc    Verify email with OTP
+// @access  Private
+const verifyEmail = async (req, res) => {
+  try {
+    const { otp } = req.body;
+
+    if (!otp || !/^\d{6}$/.test(otp)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid 6-digit OTP',
+      });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (!user.otp || !user.otp.code) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP not found. Please request a new verification code',
+      });
+    }
+
+    // Check if OTP is expired
+    if (new Date() > user.otp.expiresAt) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP has expired. Please request a new verification code',
+      });
+    }
+
+    // Verify OTP
+    if (user.otp.code !== otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid OTP',
+      });
+    }
+
+    // Email verified - update user
+    user.isEmailVerified = true;
+    user.otp = undefined; // Clear OTP after verification
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Email verified successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+        isMobileVerified: user.isMobileVerified,
+        profilePicture: user.profilePicture,
+      },
+    });
+  } catch (error) {
+    console.error('Verify email error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error verifying email',
+      error: error.message,
+    });
+  }
+};
+
+// @route   POST /api/auth/mobile/send-verification
+// @desc    Send mobile verification OTP to logged-in user
+// @access  Private
+const sendMobileVerification = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (!user.mobile) {
+      return res.status(400).json({
+        success: false,
+        message: 'No mobile number found for this account',
+      });
+    }
+
+    if (user.isMobileVerified) {
+      return res.status(400).json({
+        success: false,
+        message: 'Mobile number is already verified',
+      });
+    }
+
+    // Generate 6-digit OTP
+    const otpCode = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
+    });
+
+    // Set expiration (10 minutes)
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+
+    // Save OTP to user
+    user.otp = { code: otpCode, expiresAt };
+    await user.save();
+
+    // Send OTP via SMS
+    const smsResult = await sendOTPviaSMS(user.mobile, otpCode);
+
+    // Always show OTP in console for development/testing
+    console.log('\n📱 ============================================');
+    console.log('📱 Mobile Verification OTP Generated:');
+    console.log(`📱 Mobile: ${user.mobile}`);
+    console.log(`📱 OTP Code: ${otpCode}`);
+    console.log(`📱 Valid for: 10 minutes`);
+    console.log('📱 ============================================\n');
+
+    res.json({
+      success: true,
+      message: 'Verification code sent to your mobile',
+      // In development, always return OTP for testing
+      ...(process.env.NODE_ENV === 'development' && { otp: otpCode }),
+      // Also return OTP if SMS failed (for testing)
+      ...(smsResult && !smsResult.success && { otp: otpCode }),
+    });
+  } catch (error) {
+    console.error('Send mobile verification error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error sending verification code',
+      error: error.message,
+    });
+  }
+};
+
+// @route   POST /api/auth/mobile/verify-verification
+// @desc    Verify mobile with OTP (for logged-in users)
+// @access  Private
+const verifyMobile = async (req, res) => {
+  try {
+    const { otp } = req.body;
+
+    if (!otp || !/^\d{6}$/.test(otp)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid 6-digit OTP',
+      });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (!user.otp || !user.otp.code) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP not found. Please request a new verification code',
+      });
+    }
+
+    // Check if OTP is expired
+    if (new Date() > user.otp.expiresAt) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP has expired. Please request a new verification code',
+      });
+    }
+
+    // Verify OTP
+    if (user.otp.code !== otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid OTP',
+      });
+    }
+
+    // Mobile verified - update user
+    user.isMobileVerified = true;
+    user.otp = undefined; // Clear OTP after verification
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Mobile number verified successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+        isMobileVerified: user.isMobileVerified,
+        profilePicture: user.profilePicture,
+      },
+    });
+  } catch (error) {
+    console.error('Verify mobile error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error verifying mobile',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerWithEmail,
   loginWithEmail,
@@ -556,5 +846,9 @@ module.exports = {
   googleAuthCallback,
   getCurrentUser,
   updateCurrentUser,
+  sendEmailVerification,
+  verifyEmail,
+  sendMobileVerification,
+  verifyMobile,
 };
 
