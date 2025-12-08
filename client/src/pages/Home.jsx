@@ -125,11 +125,11 @@ const Home = () => {
           
           <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8 md:p-10 space-y-4 sm:space-y-5">
             <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">
-              <span className="font-bold text-gray-900">MyCityMyVoice</span> is a citizen-driven platform designed to empower people to share their opinions, ideas, and civic issues directly with local authorities. It's a digital bridge between citizens and government, making urban governance more transparent and effective.
+              <span className="font-bold text-gray-900">MyCityMyVoice</span> is a growing community-driven platform that celebrates raw, real, and rising talent from every corner of the city. From open mics to curated showcases, we provide a stage for storytellers, poets, musicians, comedians, and performers of all kinds to express, connect, and thrive. Built on passion and purpose, mycitymyvoice brings together artists and audiences to share authentic experiences through the power of performance.
             </p>
             
             <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">
-              Our goal is to make every citizen's voice heard and valued — creating smarter, cleaner, and more connected cities for the future. Through technology, collaboration, and participation, we bring communities together for real change.
+              With over 140+ open mics across 30+ cities, and roots in expression and culture, My City My Voice celebrates the soul of every individual it touches.
             </p>
             
             <div className="flex justify-center pt-4">
@@ -398,7 +398,7 @@ const Home = () => {
               {/* Stat Card 3 */}
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
                 <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FFD700] mb-2">
-                  500+
+                  200+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-700 font-medium">
                   Events
