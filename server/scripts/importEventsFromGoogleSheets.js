@@ -110,6 +110,8 @@ const columnMapping = {
   category: ['category', 'Category'],
   isPaidEvent: ['is paid event?', 'Is paid event?', 'is paid event', 'Is paid event'],
   basePrice: ['base price', 'Base price', 'price', 'Price', 'ticket price', 'Ticket Price'],
+  performerPrice: ['price(performer)', 'Price(Performer)', 'performer price', 'Performer Price', 'price (performer)', 'Price (Performer)'],
+  audiencePrice: ['price(audience)', 'Price(Audience)', 'audience price', 'Audience Price', 'price (audience)', 'Price (Audience)'],
   currency: ['currency', 'Currency'],
   maxCapacity: ['max capacity', 'capacity', 'maxcapacity', 'Max Capacity', 'Capacity'],
   eventMode: ['event mode', 'Event mode'],
@@ -446,6 +448,22 @@ async function importEventsFromGoogleSheets(googleSheetsUrl) {
         const parsedEndDate = endDateValue ? parseDate(endDateValue) : null;
         const parsedEndTime = endTimeValue ? parseTime(endTimeValue) : null;
         
+        // Determine price - priority: audiencePrice > performerPrice > basePrice
+        let finalPrice = 0;
+        if (isPaidEvent) {
+          const audiencePrice = getValue('audiencePrice');
+          const performerPrice = getValue('performerPrice');
+          const basePrice = getValue('basePrice');
+          
+          if (audiencePrice) {
+            finalPrice = parsePrice(audiencePrice, isPaidEvent);
+          } else if (performerPrice) {
+            finalPrice = parsePrice(performerPrice, isPaidEvent);
+          } else if (basePrice) {
+            finalPrice = parsePrice(basePrice, isPaidEvent);
+          }
+        }
+        
         const eventData = {
           title: getValue('title'),
           description: description,
@@ -460,7 +478,7 @@ async function importEventsFromGoogleSheets(googleSheetsUrl) {
             city: getValue('city') || 'Nagpur',
           },
           category: parseCategory(getValue('category')),
-          price: parsePrice(getValue('basePrice'), isPaidEvent),
+          price: finalPrice,
           currency: getValue('currency') || 'INR',
           maxCapacity: getValue('maxCapacity') ? parseInt(getValue('maxCapacity')) : null,
           organizer: {
